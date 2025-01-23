@@ -1,0 +1,20 @@
+dev
+~~~~
+logging.level.org.springframework=trace
+
+prod
+~~~~
+logging.level.org.springframework=info
+
+
+trace
+debug
+info
+warning
+error
+
+off
+
+
+management.endpoints.web.exposure.include = *                  (actuator'daki tüm endpoint'leri gösterir)
+management.endpoints.web.exposure.include = health, metrics    (actuator'daki 'healt' ve 'metrics' endpoint'lerini gösterir)
