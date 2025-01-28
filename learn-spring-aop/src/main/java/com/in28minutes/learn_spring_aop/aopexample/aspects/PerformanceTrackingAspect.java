@@ -13,7 +13,8 @@ public class PerformanceTrackingAspect {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Around("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")
+	//@Around("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")
+	@Around("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()")
 	public Object findExecutionTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {     //Burada bu sefer 'JoinPoint' kullanmayacağız çünkü 'JoinPoint' bu method içerisinde başka bir method çalıştırmamıza izin vermez. Fakat biz burada bu method içerisinde başka bir method daha çalıştırmak istiyoruz bundan dolayı bu işlemi yapmamızı sağlayan 'ProceedingJoinPoint'i kullanacağız. Yani 'ProceedingJoinPoint'in yapmamıza izin verdiği şey, methodu yürütmektir. 'proceed()' adı verilen bir şeyi çağırabilir ve bu sayede methodu çalıştırabiliriz bu da '@Around advice'i uygulamamıza yardımcı olur.  
 		//start a timer(method çalıştırılmadan önce)
 		long startTimeMillis = System.currentTimeMillis();
@@ -79,7 +80,6 @@ public class PerformanceTrackingAspect {
 	
 	//Görüldüğü gibi ilk olarak "DataService1 ve BusinessService1" içindeki 'retrieveData()' ve 'calculateMax()' methodları durdurulmuş ardından "DataService2 ve BusinessService2" içindeki 'retrieveData()' ve 'calculateMin()' methodları durdurulmuştur. Sonuç olarak 'LoggingAspect' class'ı içerisinde tanımladığımız "@Before, @After, @AfterReturning, @Around" annotation'larının tümü, "business" ve "data" paketleri içerisinde oluşturduğumuz tüm class'lar için geçerlidir. Yani hepsini durdurabilme işlemini başarıyla gerçekleştirmiştir.
 	//Özetlersek; kodu bir kez yazarız("LoggingAspect" class'ı içerisinde yaptığımız gibi) ve kod, söz konusu paketteki birden fazla class'a uygulanabilir.("DataService1" ve "BusinessService1" class'ları ile "DataService2" ve "BusinessService2" class'ları için) Yani "AOP"nin yapmamıza izin verdiği şey budur. Bir "Advice" tanımlayabilir ve bunu birden fazla farklı katmana uygulayabiliriz.
-	
 	
 	
 

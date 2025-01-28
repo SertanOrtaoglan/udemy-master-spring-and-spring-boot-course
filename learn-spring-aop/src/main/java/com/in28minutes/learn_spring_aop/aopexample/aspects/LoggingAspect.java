@@ -21,7 +21,9 @@ public class LoggingAspect {
 	//Pointcut - When?
 	// execution(* PACKAGE.*.*(..)) 
 	//NOT: Hem "business" paketindeki hem de "data" paketindeki her şeyi kesmek istiyorsak, pointcut'ı @Before("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))") şeklinde yazarız.(Yani en son kısımda paket adı yazdığımız yere * koymamız yeterlidir.) Böylelikle hem "business" hem de "data" paketinde bulunan bean'lere giden method çağrılarını kesmiş oluruz.
-	@Before("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")
+	//@Before("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")
+	@Before("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()")   //Pointcut'ları tanımladığımız ortak bir pointcut class'ı oluşturduk(CommonPointcutConfig) ve içerisinde tanımladığımız pointcut'ları buraya ekliyoruz. Böylelikle ilerde bir paket adı vs. değişimi yaptığımızda bu class içerisinde tanımladığımız her pointcut'ı teker teker değiştirmekle uğraşmadan işlemi merkezi bir noktadan yönetmiş oluyoruz.
+	//@Before("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.allPackageConfigUsingBean()")    //"Bean" için örnek
 	public void logMethodCallBeforeExecution(JoinPoint joinPoint) {       
 		//Logic - What?
 		logger.info("Before Aspect - {} is called with arguments: {}", joinPoint,joinPoint.getArgs());   //Method parametresi olarak bir 'joinPoint' alıyoruz ve hangi method'ların kesildiğini log'a yazdırıyoruz. 'joinPoint' ayrıca method çağrısı hakkında birkaç ayrıntı daha belirlememize yardımcı olur. Örneğin 'getArgs()'a bakalım.
@@ -32,7 +34,8 @@ public class LoggingAspect {
 	
 	
 	//"@After" annotation
-	@After("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")  //Pointcut - WHEN
+	//@After("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")  //Pointcut - WHEN
+	@After("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()")  //Pointcut - WHEN
 	public void logMethodCallAfterExecution(JoinPoint joinPoint) {       
 		//Logic - WHAT
 		logger.info("After Aspect - {} has executed", joinPoint);
@@ -57,7 +60,8 @@ public class LoggingAspect {
 
 
 	//"@AfterThrowing" annotation
-	@AfterThrowing(pointcut = "execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))", throwing = "exception")   //Burada ilk olarak pointcut'ı tanımladık ardından throwing = "exception" dedik. Böylelikle bir exception fırlatıldığında ve uygulama durdurulduğunda, exception'ın türü neyse bu isimde bir değişkene("excepiton") eşlenecektir.
+	//@AfterThrowing(pointcut = "execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))", throwing = "exception")   //Burada ilk olarak pointcut'ı tanımladık ardından throwing = "exception" dedik. Böylelikle bir exception fırlatıldığında ve uygulama durdurulduğunda, exception'ın türü neyse bu isimde bir değişkene("excepiton") eşlenecektir.
+	@AfterThrowing(pointcut = "com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()", throwing = "exception")
 	public void logMethodCallAfterException(JoinPoint joinPoint, Exception exception) {
 		//Logic - WHAT
 		logger.info("AfterThrowing Aspect - {} has thrown an exception {}", joinPoint,exception);
@@ -81,7 +85,8 @@ public class LoggingAspect {
 	
 	
 	//"@AfterReturning" annotation
-	@AfterReturning(pointcut = "execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))", returning = "resultValue")   //Burada ilk olarak pointcut'ı tanımladık ardından returning = "resultValue" dedik. Böylelikle pointcut'tan bize return edilen değeri(mesela "55") aspect'imizin method imzasında[logMethodCallAfterSuccessfulExecution(JoinPoint joinPoint, Object resultValue)] kullanırken vereceğimiz değişken adını returning ile "resultValue" olarak tanımlamış olduk.
+	//@AfterReturning(pointcut = "execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))", returning = "resultValue")   //Burada ilk olarak pointcut'ı tanımladık ardından returning = "resultValue" dedik. Böylelikle pointcut'tan bize return edilen değeri(mesela "55") aspect'imizin method imzasında[logMethodCallAfterSuccessfulExecution(JoinPoint joinPoint, Object resultValue)] kullanırken vereceğimiz değişken adını returning ile "resultValue" olarak tanımlamış olduk.
+	@AfterReturning(pointcut = "com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()", returning = "resultValue")
 	public void logMethodCallAfterSuccessfulExecution(JoinPoint joinPoint, Object resultValue) {
 		//Logic - WHAT
 		logger.info("AfterReturning Aspect - {} has returned {}", joinPoint,resultValue);
@@ -95,12 +100,6 @@ public class LoggingAspect {
 		//Görüldüğü gibi pointcut içerisinde bulunan tüm method'lar(yani DataService1'deki 'retrieveData()' methodu ve BusinessService1'deki calculateMax()' methodu) başarıyla çalıştığı için ikisinin de log'ları(AfterReturning Aspect...) ekrana yazdırıldı. Yani bu iki method herhangi bir exception fırlatmadığı için yukarıdaki "logMethodCallAfterSuccessfulExecution" methodumuz her ikisi için de başarıyla yürütüldü. NOT: Eğer pointcut'daki method'lardan herhangi biri exception fırlatıyor olsaydı buradaki "logMethodCallAfterSuccessfulExecution" methodumuz, o exception fırlatan method için yürütülmezdi!
 	}
 
-	
-	
-	
-	
-	
-	
 	
 	
 }
