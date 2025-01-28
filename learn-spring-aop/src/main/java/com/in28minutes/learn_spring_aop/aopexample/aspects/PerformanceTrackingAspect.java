@@ -14,7 +14,8 @@ public class PerformanceTrackingAspect {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	//@Around("execution(* com.in28minutes.learn_spring_aop.aopexample.*.*.*(..))")
-	@Around("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()")
+	//@Around("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.businessAndDataPackageConfig()")   //Common pointcut kullanımı
+	@Around("com.in28minutes.learn_spring_aop.aopexample.aspects.CommonPointcutConfig.trackTimeAnnotation()")    //Böylelikle sadece "trackTimeAnnotation()" özelliğine sahip olan methodları("@TrackTime") keseceğiz ve izleyeceğiz. Kodu bu şekilde çalıştırırsak log'larda "Around Aspect" için sadece 2 çıktı görürüz bunlar "@TrackTime" annotation'larını kullanan "BusinessService1.calculateMax()" methodu ile "DataService2.retrieveData()" methodudur. Yani bu iki method kesildi ve log'larda gösterildi.
 	public Object findExecutionTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {     //Burada bu sefer 'JoinPoint' kullanmayacağız çünkü 'JoinPoint' bu method içerisinde başka bir method çalıştırmamıza izin vermez. Fakat biz burada bu method içerisinde başka bir method daha çalıştırmak istiyoruz bundan dolayı bu işlemi yapmamızı sağlayan 'ProceedingJoinPoint'i kullanacağız. Yani 'ProceedingJoinPoint'in yapmamıza izin verdiği şey, methodu yürütmektir. 'proceed()' adı verilen bir şeyi çağırabilir ve bu sayede methodu çalıştırabiliriz bu da '@Around advice'i uygulamamıza yardımcı olur.  
 		//start a timer(method çalıştırılmadan önce)
 		long startTimeMillis = System.currentTimeMillis();

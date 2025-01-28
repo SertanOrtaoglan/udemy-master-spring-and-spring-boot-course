@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
+import com.in28minutes.learn_spring_aop.aopexample.annotations.TrackTime;
 import com.in28minutes.learn_spring_aop.aopexample.data.DataService1;
 
 
@@ -17,6 +18,7 @@ public class BusinessService1 {
 	}
 
 	
+	@TrackTime  //Hangi methodlarda performans takibi yapmak istiyorsak(zaman hesabı), o methoda bu kendi oluşturduğumuz "@TrackTime" annotation'ını ekleyebiliriz.
 	public int calculateMax() {
 		int[] data = dataService1.retrieveData();
 		

@@ -20,4 +20,9 @@ public class CommonPointcutConfig {
 	public void allPackageConfigUsingBean() {}
 	
 	
+	
+	@Pointcut("@annotation(com.in28minutes.learn_spring_aop.aopexample.annotations.TrackTime)")  //Kendi oluşturduğumuz "@TrackTime" annotation'ını pointcut olarak bu şekilde tanımlayabiliriz. Diğer pointcut tanımlamalarından farklı olarak bu sefer "@annotation" ifadesini kullanırız.
+	public void trackTimeAnnotation() {}
+	
+	
 }
